@@ -6,9 +6,9 @@
 
 // Database connection details
 $db_host = 'bedrock-db';
-$db_name = 'wordpress';
-$db_user = 'root';
-$db_pass = 'rootpassword';
+$db_name = 'bedrock';
+$db_user = 'bedrock';
+$db_pass = 'CzAFtzDcZEKNJQI7';
 
 // Connect to the database
 $mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);

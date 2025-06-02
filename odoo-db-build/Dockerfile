@@ -2,7 +2,7 @@ FROM postgres:13
 
 # Environment variables for database setup
 ENV POSTGRES_USER=odoo
-ENV POSTGRES_PASSWORD=odoo_password
+ENV POSTGRES_PASSWORD=tKdPdRizCu6QCPO8
 ENV POSTGRES_DB=postgres
 
 # Copy initialization scripts if needed
