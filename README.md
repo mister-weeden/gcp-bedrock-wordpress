@@ -1,75 +1,41 @@
-# Harper Corporation Docker Infrastructure
+# Harper Corp Container Images
 
-This repository contains the Docker configuration for Harper Corporation's main applications. We use Docker Compose to manage three primary services, each running in its own container and serving different business functions.
+This repository contains Docker container images used for various services.
 
-## Overview
+## Available Images
 
-Our infrastructure consists of three main applications:
+- **harper-corp/haproxy**: HAProxy load balancer
+- **harper-corp/bedrock**: WordPress Bedrock installation
+- **harper-corp/odoo**: Odoo ERP system
+- **harper-corp/odoo-db**: PostgreSQL database for Odoo
+- **harper-corp/comfyui**: ComfyUI application
 
-1. **Bedrock WordPress** - Corporate Website
-   - **Service Name**: bedrock
-   - **Purpose**: Main corporate website and content management
-   - **URL**: [www.harper-corp.com](https://www.harper-corp.com)
-   - **Tech Stack**: WordPress with Bedrock (modern WordPress stack with improved security and development workflow)
+## Building Images
 
-2. **Odoo ERM** - Enterprise Resource Management
-   - **Service Name**: odoo
-   - **Purpose**: Enterprise Resource Management system for business operations
-   - **URL**: [apps.harper-corp.com](https://apps.harper-corp.com)
-   - **Tech Stack**: Odoo ERP/CRM platform
-
-3. **ComfyUI** - AI Media Generation
-   - **Service Name**: comfyui
-   - **Purpose**: Video and image generation using AI
-   - **URL**: [ai.harper-corp.com](https://ai.harper-corp.com)
-   - **Tech Stack**: ComfyUI (AI image and video generation framework)
-
-## Docker Compose Configuration
-
-The `docker-compose.yml` file in this repository orchestrates these services, managing their dependencies, networking, and persistent storage. Each service is configured with appropriate environment variables, volume mounts, and network settings to ensure proper isolation and communication.
-
-## Getting Started
-
-### Prerequisites
-
-- Docker and Docker Compose installed on your system
-- Access to Harper Corporation's private Docker registry (if applicable)
-
-### Starting the Services
+To build all images, run the build script:
 
 ```bash
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop all services
-docker-compose down
+./build-images.sh
 ```
 
-## Service-Specific Information
+## Docker Compose
 
-### Bedrock WordPress (www.harper-corp.com)
+The `docker-compose.yml` file in this repository defines all services and their relationships.
 
-The corporate website runs on a modern WordPress stack called Bedrock, which provides improved security, dependency management, and development workflows.
+To start all services:
 
-### Odoo ERM (apps.harper-corp.com)
+```bash
+docker-compose up -d
+```
 
-Our ERM system handles business operations including inventory management, CRM, accounting, and more.
+## GitHub Workflow
 
-### ComfyUI (ai.harper-corp.com)
+This repository includes a GitHub workflow that automatically builds and pushes images to GitHub Container Registry (ghcr.io) when changes are pushed to the main branch.
 
-This AI-powered service generates images and videos for marketing, product visualization, and other creative needs.
+## Image Directories
 
-## Maintenance
-
-Regular backups of all service data are essential. Each service has volume mounts configured in the docker-compose.yml file to persist data.
-
-## Network Configuration
-
-All three services are exposed through a reverse proxy that handles SSL termination and routes traffic based on the domain name.
-
----
-
-For more detailed information about each service, please refer to their respective documentation folders within this repository.
+- `haproxy-build/`: HAProxy image build files
+- `bedrock-build/`: WordPress Bedrock image build files
+- `odoo-build/`: Odoo image build files
+- `odoo-db-build/`: PostgreSQL for Odoo image build files
+- `comfyui-build/`: ComfyUI image build files

@@ -1,0 +1,103 @@
+name: Build and Push Container Images
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docker-compose.yml'
+      - '**/Dockerfile'
+      - '.github/workflows/build-and-push.yml'
+      - 'build-images.sh'
+      - 'haproxy/**'
+      - 'bedrock/**'
+      - 'comfyui/**'
+      - 'odoo-config/**'
+      - 'supervisor/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Prepare build directories
+      - name: Prepare build directories
+        run: |
+          # ComfyUI
+          mkdir -p comfyui-build/supervisor
+          cp -r ./comfyui/* ./comfyui-build/ 2>/dev/null || true
+          cp -r ./supervisor/* ./comfyui-build/supervisor/ 2>/dev/null || true
+          
+          # Bedrock
+          cp -r ./bedrock/* ./bedrock-build/ 2>/dev/null || true
+          
+          # Odoo
+          cp -r ./odoo-config/* ./odoo-build/ 2>/dev/null || true
+          
+          # HAProxy
+          cp -r ./haproxy/* ./haproxy-build/ 2>/dev/null || true
+
+      # Build and push comfyui image
+      - name: Build and push comfyui image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./comfyui-build
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/comfyui:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Build and push bedrock image
+      - name: Build and push bedrock image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./bedrock-build
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/bedrock:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Build and push odoo image
+      - name: Build and push odoo image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./odoo-build
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/odoo:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Build and push odoo-db image
+      - name: Build and push odoo-db image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./odoo-db-build
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/odoo-db:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Build and push haproxy image
+      - name: Build and push haproxy image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./haproxy-build
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/haproxy:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
