@@ -2,7 +2,7 @@ version: '3'
 
 services:
   haproxy:
-    image: harper-corp/haproxy:latest
+    image: ghcr.io/mister-weeden/haproxy:latest
     container_name: haproxy
     depends_on:
       - odoo
@@ -20,7 +20,7 @@ services:
       - haproxy_network
 
   bedrock:
-    image: harper-corp/bedrock:latest
+    image: ghcr.io/mister-weeden/bedrock:latest
     container_name: bedrock
     depends_on:
       - bedrock-db
@@ -34,7 +34,7 @@ services:
       - wordpress_network
 
   bedrock-db:
-    image: mysql:5.7
+    image: ghcr.io/mister-weeden/bedrock-db:latest
     container_name: bedrock-db
     volumes:
       - bedrock_db_data:/var/lib/mysql
@@ -53,7 +53,7 @@ services:
       - wordpress_network
 
   odoo:
-    image: harper-corp/odoo:latest
+    image: ghcr.io/mister-weeden/odoo:latest
     container_name: odoo
     depends_on:
       - odoo-db
@@ -66,7 +66,7 @@ services:
       - odoo_network
 
   odoo-db:
-    image: harper-corp/odoo-db:latest
+    image: ghcr.io/mister-weeden/odoo-db:latest
     container_name: odoo-db
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
@@ -76,7 +76,7 @@ services:
       - odoo_network
 
   mailhog:
-    image: mailhog/mailhog:latest
+    image: ghcr.io/mister-weeden/mailhog:latest
     container_name: mailhog
     ports:
       - "${MAILHOG_SMTP_PORT:-1025}:1025"
@@ -86,7 +86,7 @@ services:
       - wordpress_network
 
   comfyui:
-    image: harper-corp/comfyui:latest
+    image: ghcr.io/mister-weeden/comfyui:latest
     container_name: comfyui-supervisor-1
     ports:
       - "${COMFYUI_HOST_IP:-192.168.1.145}:${COMFYUI_PORT:-18188}:18188"
