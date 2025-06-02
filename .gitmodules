@@ -1,0 +1,4 @@
+[submodule "comfyui"]
+	path = comfyui
+	url = https://github.com/mister-weeden/comfyui
+	branch = latest-cpu
