@@ -1,5 +1,7 @@
 # Harper Corp Container Images
 
+![Build and Push Container Images](https://github.com/mister-weeden/harper-corp-containers/actions/workflows/build-and-push.yml/badge.svg)
+
 This repository contains Docker container images used for various services.
 
 ## Available Images
