@@ -1,0 +1,106 @@
+version: '3'
+
+services:
+  haproxy:
+    image: harper-corp/haproxy:latest
+    container_name: haproxy
+    depends_on:
+      - odoo
+      - bedrock
+      - comfyui
+    ports:
+      - "${HAPROXY_ADMIN_HOST_IP:-192.168.1.10}:${HAPROXY_ADMIN_PORT:-8000}:8000"
+      - "${HAPROXY_HOST_IP:-192.168.1.145}:${HAPROXY_HTTP_PORT:-8080}:8080"
+      - "${HAPROXY_HOST_IP:-192.168.1.145}:${HAPROXY_HTTPS_PORT:-8443}:8443"
+    volumes:
+      - ./logs:/var/log/haproxy
+    networks:
+      - odoo_network
+      - wordpress_network
+      - haproxy_network
+
+  bedrock:
+    image: harper-corp/bedrock:latest
+    container_name: bedrock
+    depends_on:
+      - bedrock-db
+    volumes:
+      - ./bedrock:/srv/bedrock
+      - ./uploads:/srv/bedrock/web/app/uploads
+    environment:
+      - DB_HOST=${BEDROCK_DB_HOST:-bedrock-db}
+      - MEMCACHED_HOST=${BEDROCK_MEMCACHED_HOST:-bedrock-memcached}
+    networks:
+      - wordpress_network
+
+  bedrock-db:
+    image: mysql:5.7
+    container_name: bedrock-db
+    volumes:
+      - bedrock_db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${BEDROCK_ROOT_PASSWORD:-bedrock_root_password}
+      - MYSQL_DATABASE=${BEDROCK_DATABASE:-bedrock}
+      - MYSQL_USER=${BEDROCK_USER:-bedrock}
+      - MYSQL_PASSWORD=${BEDROCK_PASSWORD:-bedrock_password}
+    networks:
+      - wordpress_network
+
+  bedrock-memcached:
+    image: memcached:latest
+    container_name: bedrock-memcached
+    networks:
+      - wordpress_network
+
+  odoo:
+    image: harper-corp/odoo:latest
+    container_name: odoo
+    depends_on:
+      - odoo-db
+    ports:
+      - "${ODOO_PORT:-8069}:8069"
+      - "${ODOO_LONGPOLLING_PORT:-8071}:8071"
+    volumes:
+      - ./odoo-addons:/mnt/extra-addons
+    networks:
+      - odoo_network
+
+  odoo-db:
+    image: harper-corp/odoo-db:latest
+    container_name: odoo-db
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - odoo_db_data:/var/lib/postgresql/data
+    networks:
+      - odoo_network
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"
+      - "${MAILHOG_UI_PORT:-8025}:8025"
+    networks:
+      - odoo_network
+      - wordpress_network
+
+  comfyui:
+    image: harper-corp/comfyui:latest
+    container_name: comfyui-supervisor-1
+    ports:
+      - "${COMFYUI_HOST_IP:-192.168.1.145}:${COMFYUI_PORT:-18188}:18188"
+    volumes:
+      - ./comfyui:/workspace
+    networks:
+      - haproxy_network
+
+networks:
+  odoo_network:
+  wordpress_network:
+  haproxy_network:
+    driver: bridge
+
+volumes:
+  bedrock_db_data:
+  odoo_db_data:
