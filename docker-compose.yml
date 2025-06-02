@@ -9,9 +9,9 @@ services:
       - bedrock
       - comfyui
     ports:
-      - "${HAPROXY_ADMIN_HOST_IP:-192.168.1.10}:${HAPROXY_ADMIN_PORT:-8000}:8000"
-      - "${HAPROXY_HOST_IP:-192.168.1.145}:${HAPROXY_HTTP_PORT:-8080}:8080"
-      - "${HAPROXY_HOST_IP:-192.168.1.145}:${HAPROXY_HTTPS_PORT:-8443}:8443"
+      - "${HAPROXY_ADMIN_HOST_IP}:${HAPROXY_ADMIN_PORT}:8000"
+      - "${HAPROXY_HOST_IP}:${HAPROXY_HTTP_PORT}:8080"
+      - "${HAPROXY_HOST_IP}:${HAPROXY_HTTPS_PORT}:8443"
     volumes:
       - ./logs:/var/log/haproxy
     networks:
@@ -28,8 +28,8 @@ services:
       - ./bedrock:/srv/bedrock
       - ./uploads:/srv/bedrock/web/app/uploads
     environment:
-      - DB_HOST=${BEDROCK_DB_HOST:-bedrock-db}
-      - MEMCACHED_HOST=${BEDROCK_MEMCACHED_HOST:-bedrock-memcached}
+      - DB_HOST=${BEDROCK_DB_HOST}
+      - MEMCACHED_HOST=${BEDROCK_MEMCACHED_HOST}
     networks:
       - wordpress_network
 
@@ -39,10 +39,10 @@ services:
     volumes:
       - bedrock_db_data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${BEDROCK_ROOT_PASSWORD:-bedrock_root_password}
-      - MYSQL_DATABASE=${BEDROCK_DATABASE:-bedrock}
-      - MYSQL_USER=${BEDROCK_USER:-bedrock}
-      - MYSQL_PASSWORD=${BEDROCK_PASSWORD:-bedrock_password}
+      - MYSQL_ROOT_PASSWORD=${BEDROCK_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${BEDROCK_DATABASE}
+      - MYSQL_USER=${BEDROCK_USER}
+      - MYSQL_PASSWORD=${BEDROCK_PASSWORD}
     networks:
       - wordpress_network
 
@@ -58,8 +58,8 @@ services:
     depends_on:
       - odoo-db
     ports:
-      - "${ODOO_PORT:-8069}:8069"
-      - "${ODOO_LONGPOLLING_PORT:-8071}:8071"
+      - "${ODOO_PORT}:8069"
+      - "${ODOO_LONGPOLLING_PORT}:8071"
     volumes:
       - ./odoo-addons:/mnt/extra-addons
     networks:
@@ -69,7 +69,7 @@ services:
     image: ghcr.io/mister-weeden/odoo-db:latest
     container_name: odoo-db
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - odoo_db_data:/var/lib/postgresql/data
     networks:
@@ -79,8 +79,8 @@ services:
     image: ghcr.io/mister-weeden/mailhog:latest
     container_name: mailhog
     ports:
-      - "${MAILHOG_SMTP_PORT:-1025}:1025"
-      - "${MAILHOG_UI_PORT:-8025}:8025"
+      - "${MAILHOG_SMTP_PORT}:1025"
+      - "${MAILHOG_UI_PORT}:8025"
     networks:
       - odoo_network
       - wordpress_network
@@ -89,7 +89,7 @@ services:
     image: ghcr.io/mister-weeden/comfyui:latest
     container_name: comfyui-supervisor-1
     ports:
-      - "${COMFYUI_HOST_IP:-192.168.1.145}:${COMFYUI_PORT:-18188}:18188"
+      - "${COMFYUI_HOST_IP}:${COMFYUI_PORT}:18188"
     volumes:
       - ./comfyui:/workspace
     networks:

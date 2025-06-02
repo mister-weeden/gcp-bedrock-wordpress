@@ -25,8 +25,8 @@ services:
     #          count: all
     #          capabilities: [gpu]
     
-    devices:
-      - "/dev/dri:/dev/dri"
+    #devices:
+      #- "/dev/dri:/dev/dri"
       ## For AMD GPU
       #- "/dev/kfd:/dev/kfd"
       
@@ -40,7 +40,7 @@ services:
       # Will echo to root-owned authorized_keys file;
       # Avoids changing local file owner
       - ./config/authorized_keys:/root/.ssh/authorized_keys_mount
-      #- ./config/provisioning/default.sh:/opt/ai-dock/bin/provisioning.sh
+      - ./config/provisioning/default.sh:/opt/ai-dock/bin/provisioning.sh
       # In-container development
       - ./build/COPY_ROOT_1/opt/ai-dock/api-wrapper:/opt/ai-dock/api-wrapper
     ports:

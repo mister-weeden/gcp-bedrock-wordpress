@@ -122,24 +122,24 @@ sed -i "s/BEDROCK_PASSWORD:-bedrock_password}/BEDROCK_PASSWORD:-$BEDROCK_PASSWOR
 
 # Build comfyui image
 echo "Building comfyui image..."
-docker build -t harper-corp/comfyui:latest ./comfyui-build
+docker build -t ghcr.io/mister-weeden/comfyui:latest ./comfyui-build
 
 # Build bedrock image
 echo "Building bedrock image..."
-docker build -t harper-corp/bedrock:latest ./bedrock-build
+docker build -t ghcr.io/mister-weeden/bedrock:latest ./bedrock-build
 
 # Build odoo image
 echo "Building odoo image..."
-docker build -t harper-corp/odoo:latest ./odoo-build
+docker build -t ghcr.io/mister-weeden/odoo:latest ./odoo-build
 
 # Build odoo-db image
 echo "Building odoo-db image..."
-docker build -t harper-corp/odoo-db:latest ./odoo-db-build
+docker build -t ghcr.io/mister-weeden/odoo-db:latest ./odoo-db-build
 
 # Build haproxy image
 echo "Building haproxy image..."
-docker build -t harper-corp/haproxy:latest ./haproxy-build
+docker build -t ghcr.io/mister-weeden/haproxy:latest ./haproxy-build
 
 echo "All images built successfully!"
-echo "Run 'docker images | grep harper-corp' to see the built images."
+echo "Run 'docker images | grep mister-weeden to see the built images."
 echo "Secure passwords have been generated and stored in env.local"

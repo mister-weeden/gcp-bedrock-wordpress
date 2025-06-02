@@ -1,11 +1,11 @@
 # For build automation - Allows building from any ai-dock base image
 # Use a *cuda*base* image as default because pytorch brings the libs
-ARG IMAGE_BASE="ghcr.io/ai-dock/python:3.10-v2-cpu-22.04"
+ARG IMAGE_BASE="ghcr.io/ai-dock/python:3.10-v2-cuda-12.1.1-base-22.04"
 FROM ${IMAGE_BASE}
 
 LABEL org.opencontainers.image.source https://github.com/ai-dock/comfyui
 LABEL org.opencontainers.image.description "ComfyUI Stable Diffusion backend and GUI"
-LABEL maintainer="Scott Weeden <sweeden@ttu.edu>"
+LABEL maintainer="Rob Ballantyne <rob@dynamedia.uk>"
 
 ENV COMFYUI_VENV=$VENV_DIR/comfyui
 ENV COMFYUI_VENV_PYTHON=$COMFYUI_VENV/bin/python
